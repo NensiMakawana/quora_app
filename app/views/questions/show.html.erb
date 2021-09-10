@@ -1,0 +1,29 @@
+<p>
+  <strong>User:</strong>
+  <%= @question.user.email %> <%= link_to "#{follow_or_following_user(@question.user.id)}", follow_user_user_path(@question.user, que_id: @question) if not_me(@question.user) %>
+</p>
+
+<p>
+  <strong>Topic:</strong>
+  <%= @question.topic.title %> <%= link_to "#{follow_or_following_topic(@question.topic.id)}", follow_topic_user_path(topic_id: @question.topic, que_id: @question) %>
+</p>
+
+<p>
+  <strong>Question:</strong>
+  <%= @question.title %>
+</p>
+<% if alredy_given_answer(@question.id) %>
+  <p>Your Answer: <%= your_answer(@question.id) %></p>
+<% else %>
+  <%= form_tag post_answer_question_path(@question) do %>
+    Answer:<%= text_field_tag "answer[text_answer]" %>
+    <%= submit_tag "Post" %>
+  <% end %>
+<% end %>
+<b>All Answers</b><br>
+<% @question.answers.each do |ans| %>
+  User: <%= ans.user.email %> |
+  Answer: <%= ans.text_answer %>
+  <br>
+<% end %>
+<%= link_to 'Back', questions_path %>
